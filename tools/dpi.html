@@ -1,4 +1,5 @@
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css">
     <style>
         input, output{
@@ -15,13 +16,14 @@
     </style>
 </head>
 <body>
+    <h1>Recalcular DPI</h1>
     <div>
         <label>Ancho (cm)</label>
-        <input id="width">
+        <input id="width" type="number" onchange="update()">
         <label>Alto (cm)</label>
-        <input id="height">
+        <input id="height"type="number" onchange="update()">
         <label>DPI</label>
-        <input id="dpi">
+        <input id="dpi" type="number" onchange="update()">
     </div>
     <div>
         <label>Nuevo DPI (<span id="nndpi"></span>)</label>
@@ -42,13 +44,14 @@
         function update(){
             v.nwidth = Math.round((v.width/v.dpi) * v.ndpi);
             v.nheight = Math.round((v.height/v.dpi) * v.ndpi);
-            v.nndpi = v.ndpi;
+            document.querySelector('#nndpi').innerText = v.ndpi;
         }
 
         //Default
-        v.width = 100;
-        v.height = 100;
-        v.ndpi = v.dpi = 300;
+        const q = new URLSearchParams(window.location.search);
+        v.width = q.get('w') ?? q.get('width') ?? 100;
+        v.height = q.get('h') ?? q.get('height') ?? 100;
+        v.ndpi = v.dpi = q.get('d') ?? q.get('dpi') ?? 100;
 
         update();
     </script>
