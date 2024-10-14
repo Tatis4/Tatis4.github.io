@@ -1,0 +1,55 @@
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css">
+    <style>
+        input, output{
+            width:100%;
+            background: white;
+            color: black;
+        }
+        output{
+            display: inline-block;
+            border-radius: var(--standard-border-radius);
+            margin-bottom: .5rem;
+            padding: .5rem;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label>Ancho (cm)</label>
+        <input id="width">
+        <label>Alto (cm)</label>
+        <input id="height">
+        <label>DPI</label>
+        <input id="dpi">
+    </div>
+    <div>
+        <label>Nuevo DPI (<span id="nndpi"></span>)</label>
+        <input type="range" id="ndpi" oninput="update()" min="50" max="500">
+        <label>Nuevo Ancho (cm)</label>
+        <output id="nwidth"></output>
+        <label>Nuevo Alto (cm)</label>
+        <output id="nheight"></output>
+    </div>
+
+    <script>
+        v = new Proxy(document,{
+            get:(o,a)=>o.querySelector('#'+a)?.value,
+            set:(o,a,v)=>o.querySelector('#'+a).value = v
+        })
+        //v = el=>document.querySelector(el)?.value;
+
+        function update(){
+            v.nwidth = Math.round((v.width/v.dpi) * v.ndpi);
+            v.nheight = Math.round((v.height/v.dpi) * v.ndpi);
+            v.nndpi = v.ndpi;
+        }
+
+        //Default
+        v.width = 100;
+        v.height = 100;
+        v.ndpi = v.dpi = 300;
+
+        update();
+    </script>
+</body>
